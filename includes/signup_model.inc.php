@@ -27,16 +27,11 @@ function get_email(object $pdo, string $email) {
 
 // :variable as parameter
 function set_user(object $pdo, string $username, string $email, string $password){
-    $query = "INSERT INTO users (username, email, pwd) VALUES (:username, :pwd, :email);";
+    $query = "INSERT INTO users (username, email, pwd) VALUES (:username, :email, :pwd);";
     $stmt = $pdo->prepare($query);
 
-
-    $options = [
-        'cost' => 12
-    ];
-
     // change later
-    $hashed_pwd = password_hash($password, PASSWORD_BCRYPT, $options);
+    $hashed_pwd = password_hash($password, PASSWORD_DEFAULT);
     $stmt->bindParam(":username", $username);
     $stmt->bindParam(":email", $email);
     $stmt->bindParam(":pwd", $hashed_pwd);

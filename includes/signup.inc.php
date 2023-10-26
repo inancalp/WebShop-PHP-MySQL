@@ -14,9 +14,12 @@ if ($_SERVER['REQUEST_METHOD'] == "POST") {
 
         $errors = [];
 
+
+        // (!) seperate it into individual parts
         if(is_input_empty($username, $email, $password)){
             $errors['empty_input'] = "Fill in all fields!";
         }
+        
 
         if(is_email_invalid($email)){
             $errors['invalid_email'] = "Invalid Email used!";
@@ -40,18 +43,18 @@ if ($_SERVER['REQUEST_METHOD'] == "POST") {
 
 
             //signupData for to autofill correct parts
-            $signupData = [
+            $signup_data = [
                 "username" => $username,
                 "email" => $email
             ];
 
-            $_SESSION['signupData'] = $signupData;
+            $_SESSION['signup_data'] = $signup_data;
 
             header("Location: ../index.php");
             die();
         } else {
 
-            create_user($pdo, $username, $password, $email);
+            create_user($pdo, $username,  $email, $password);
             
             header("Location: ../index.php?signup=success");
             
