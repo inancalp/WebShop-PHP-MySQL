@@ -1,2 +1,24 @@
-29 | Let's Create A Login System in PHP! | 2023 | Learn PHP Full Course for Beginners:
-- stopped @ 8:40
+php -S localhost:8000
+ - run php server
+
+
+
+(.) product_image should match the image name within file system.
+
+(!) add editQuantity method for the products in cart
+
+(!) fix the img picture in cart.php >> line:95
+
+(!) I should move the "0" quantity product logic into cart_controller. 
+	=> cart.php/line65
+
+
+(!) For images, write a function: if product_image == url, return this; else return that...
+
+(!) bootstrap have file options. Maybe for admin, make an option to select a file and copy that file into assets/imgs/ directory?
+
+
+
+(!) Keep user's products within the session, even if the user is not logged in.
+
+(>>) Finished at user sessin implementations.
