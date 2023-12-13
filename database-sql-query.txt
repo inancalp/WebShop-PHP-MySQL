@@ -6,7 +6,7 @@ CREATE TABLE IF NOT EXISTS `users` (
     `last_name` VARCHAR(100) NOT NULL,
     `birth_date` DATE NOT NULL,
     `email` VARCHAR(100) NOT NULL,
-    `password` VARBINARY(64) NOT NULL,  -- Adjust the length based on your hash algorithm (e.g., SHA-256)
+    `pwd` VARBINARY(64) NOT NULL,  -- Adjust the length based on your hash algorithm (e.g., SHA-256)
     `phone_number` VARCHAR(100) NOT NULL,
     PRIMARY KEY (`user_id`)
 ) ENGINE=INNODB DEFAULT CHARSET=latin1;

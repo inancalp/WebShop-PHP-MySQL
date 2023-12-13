@@ -1,7 +1,8 @@
 <?php
 
 function getProducts() {
-    include('connection.php');
+    include_once "server/connection.php";
+    $connection = getConnection();
 
     $stmt = $connection->prepare("SELECT * FROM products");
     $stmt->execute();

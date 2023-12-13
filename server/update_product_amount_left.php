@@ -1,6 +1,8 @@
 <?php
 
-include('connection.php');
+include_once "server/connection.php";
+$connection = getConnection();
+
 
 // $product_id = 123; 
 // $new_amount_left = 50; 

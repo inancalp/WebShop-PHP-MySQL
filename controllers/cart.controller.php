@@ -41,9 +41,6 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
         }
     }
 
- 
-
-
 
     //REMOVE PRODUCT
     if(isset($_POST['remove_product'])) {
@@ -51,11 +48,6 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
         removeProductFromCart($product_id);
         dbUpdateAmountLeft($product, $requested_quantity);
     }
-
-
-
-
-
 
 
     //EDIT PRODUCT
@@ -75,18 +67,9 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     include('views/cart.view.php');
     exit;
 }
+
 include('views/cart.view.php');
 exit;
-
-
-
-
-
-
-
-
-
-
 
 
 function isQuantityIncreased($requested_quantity, $updated_requested_quantity) {

@@ -1,4 +1,4 @@
 <?
-include('connection.php');
+include_once "server/connection.php";
 
 

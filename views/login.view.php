@@ -17,5 +17,5 @@
     <button type="submit" class="btn btn-primary">Submit</button>
     </form>
 
-    <p><a href="register">Not registered? Click Here.</a></p>
+    <p><a href="register-form">Not registered? Click Here.</a></p>
 </div>

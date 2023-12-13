@@ -14,8 +14,10 @@ $routes = [
     "/cart" => "controllers/cart.controller.php",
     "/checkout" => "controllers/checkout.controller.php",
     "/user-settings" => "controllers/user.controller.php",
+    "/login-form" => "controllers/login.controller.php",
     "/login" => "controllers/login.controller.php",
-    "/register" => "controllers/register.controller.php"
+    "/register-form" => "views/register.view.php",
+    "/register" => "controllers/register.controller.php",
 ];
 
 if(array_key_exists($uri, $routes)){
