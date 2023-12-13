@@ -1,0 +1,172 @@
+CREATE TABLE IF NOT EXISTS `users` (
+    `user_id` INT NOT NULL AUTO_INCREMENT,
+    `type` ENUM('admin', 'user') NOT NULL,
+    `account_status` ENUM('active', 'inactive') NOT NULL,
+    `first_name` VARCHAR(100) NOT NULL,
+    `last_name` VARCHAR(100) NOT NULL,
+    `birth_date` DATE NOT NULL,
+    `email` VARCHAR(100) NOT NULL,
+    `password` VARBINARY(64) NOT NULL,  -- Adjust the length based on your hash algorithm (e.g., SHA-256)
+    `phone_number` VARCHAR(100) NOT NULL,
+    PRIMARY KEY (`user_id`)
+) ENGINE=INNODB DEFAULT CHARSET=latin1;
+
+
+CREATE TABLE IF NOT EXISTS `addresses` (
+    `address_id` INT NOT NULL AUTO_INCREMENT,
+    `country` VARCHAR(100) NOT NULL,
+    `city` VARCHAR(100) NOT NULL,
+    `zip_code` VARCHAR(20) NOT NULL,
+    `street` VARCHAR(100) NOT NULL,
+    `house_number` VARCHAR(20) NOT NULL,
+    `bus_number` VARCHAR(20),
+    `address_description` TEXT,
+    PRIMARY KEY (`address_id`)
+) ENGINE=INNODB DEFAULT CHARSET=latin1;
+
+
+
+CREATE TABLE IF NOT EXISTS `addresses_users` (
+    `user_id` INT NOT NULL,
+    `address_id` INT NOT NULL,
+    PRIMARY KEY (`user_id`, `address_id`),
+    FOREIGN KEY (`user_id`) REFERENCES `users`(`user_id`) ON DELETE CASCADE,
+    FOREIGN KEY (`address_id`) REFERENCES `addresses`(`address_id`) ON DELETE CASCADE
+) ENGINE=INNODB DEFAULT CHARSET=latin1;
+
+
+
+
+CREATE TABLE IF NOT EXISTS `orders` (
+    `order_id` INT NOT NULL AUTO_INCREMENT,
+    `user_id` INT,
+    `order_date` DATE NOT NULL,
+    `delivery_date` DATE,
+    `order_status` ENUM('pending', 'processing', 'shipped', 'delivered', 'cancelled') NOT NULL,
+    `delivery_notes` TEXT,
+    PRIMARY KEY (`order_id`),
+    FOREIGN KEY (`user_id`) REFERENCES `users`(`user_id`) ON DELETE SET NULL
+) ENGINE=INNODB DEFAULT CHARSET=latin1;
+
+
+
+
+CREATE TABLE IF NOT EXISTS `payments` (
+    `payment_id` INT NOT NULL AUTO_INCREMENT,
+    `order_id` INT NOT NULL,
+    `method` VARCHAR(100) NOT NULL,
+    `date` DATE NOT NULL,
+    `status` ENUM('pending', 'completed', 'failed') NOT NULL,
+    PRIMARY KEY (`payment_id`),
+    FOREIGN KEY (`order_id`) REFERENCES `orders`(`order_id`) ON DELETE CASCADE
+) ENGINE=INNODB DEFAULT CHARSET=latin1;
+
+
+
+CREATE TABLE IF NOT EXISTS `categories` (
+    `category_id` INT NOT NULL AUTO_INCREMENT,
+    `name` VARCHAR(100) NOT NULL,
+    PRIMARY KEY (`category_id`)
+) ENGINE=INNODB DEFAULT CHARSET=latin1;
+
+
+
+CREATE TABLE IF NOT EXISTS `products` (
+    `product_id` INT NOT NULL AUTO_INCREMENT,
+    `category_id` INT,
+    `name` VARCHAR(100) NOT NULL,
+    `price` DECIMAL(10, 2) NOT NULL,
+    `amount_left` INT NOT NULL,
+    `is_active` BOOLEAN NOT NULL,
+    `product_image` VARCHAR(255),
+    PRIMARY KEY (`product_id`),
+    FOREIGN KEY (`category_id`) REFERENCES `categories`(`category_id`) ON DELETE SET NULL
+) ENGINE=INNODB DEFAULT CHARSET=latin1;
+
+
+
+CREATE TABLE IF NOT EXISTS `orders_products` (
+    `order_id` INT NOT NULL,
+    `product_id` INT NOT NULL,
+    `product_amount` INT NOT NULL,
+    PRIMARY KEY (`order_id`, `product_id`),
+    FOREIGN KEY (`order_id`) REFERENCES `orders`(`order_id`) ON DELETE CASCADE,
+    FOREIGN KEY (`product_id`) REFERENCES `products`(`product_id`) ON DELETE CASCADE
+) ENGINE=INNODB DEFAULT CHARSET=latin1;
+
+
+ALTER TABLE `orders`
+ADD COLUMN `payment_id` INT AFTER `order_id`,
+ADD CONSTRAINT `fk_orders_payments`
+FOREIGN KEY (`payment_id`) REFERENCES `payments`(`payment_id`) ON DELETE SET NULL;
+
+----------------------------------------------------
+
+
+
+INSERT INTO `categories` (`name`) VALUES ('Camp Chair');
+INSERT INTO `categories` (`name`) VALUES ('Coffee Mug');
+INSERT INTO `categories` (`name`) VALUES ('Camp Stove');
+INSERT INTO `categories` (`name`) VALUES ('Pocket Knife');
+INSERT INTO `categories` (`name`) VALUES ('Lantern');
+INSERT INTO `categories` (`name`) VALUES ('Rooftop Tent');
+INSERT INTO `categories` (`name`) VALUES ('Tent');
+
+
+-----------------------------------------------------
+
+
+
+
+INSERT INTO `products` (`category_id`, `name`, `price`, `amount_left`, `is_active`, `product_image`)
+SELECT `category_id`, 'Green Chair', 29.99, 29, true, 'chair-green.jpg'
+FROM `categories`
+WHERE `name` = 'Camp Chair';
+
+INSERT INTO `products` (`category_id`, `name`, `price`, `amount_left`, `is_active`, `product_image`)
+SELECT `category_id`, 'Green Red', 29.99, 29, true, 'chair-red.jpg'
+FROM `categories`
+WHERE `name` = 'Camp Chair';
+
+INSERT INTO `products` (`category_id`, `name`, `price`, `amount_left`, `is_active`, `product_image`)
+SELECT `category_id`, 'Colored Coffee Mug', 32.99, 29, true, 'coffee-mug-colored.jpg'
+FROM `categories`
+WHERE `name` = 'Coffee Mug';
+
+INSERT INTO `products` (`category_id`, `name`, `price`, `amount_left`, `is_active`, `product_image`)
+SELECT `category_id`, 'Grey Coffee Mug', 32.99, 29, true, 'coffee-mug-grey.jpg'
+FROM `categories`
+WHERE `name` = 'Coffee Mug';
+
+INSERT INTO `products` (`category_id`, `name`, `price`, `amount_left`, `is_active`, `product_image`)
+SELECT `category_id`, 'Wooden Coffee Mug', 32.99, 29, true, 'coffee-mug-wooden.jpg'
+FROM `categories`
+WHERE `name` = 'Coffee Mug';
+
+INSERT INTO `products` (`category_id`, `name`, `price`, `amount_left`, `is_active`, `product_image`)
+SELECT `category_id`, 'Green Tent', 44.99, 29, true, 'tent-green.jpg'
+FROM `categories`
+WHERE `name` = 'Tent';
+
+
+
+INSERT INTO `products` (`category_id`, `name`, `price`, `amount_left`, `is_active`, `product_image`)
+SELECT `category_id`, 'Orange Tent', 44.99, 29, true, 'tent-orange.jpg'
+FROM `categories`
+WHERE `name` = 'Tent';
+
+
+INSERT INTO `products` (`category_id`, `name`, `price`, `amount_left`, `is_active`, `product_image`)
+SELECT `category_id`, 'Yellow Tent', 44.99, 29, true, 'tent-yellow.jpg'
+FROM `categories`
+WHERE `name` = 'Tent';
+
+
+
+
+-----------------------------------------------------
+
+
+
+
+
