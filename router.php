@@ -11,13 +11,15 @@ $uri = parse_url($_SERVER['REQUEST_URI'])['path'];
 $routes = [
     "/" => "controllers/home.controller.php",
     "/product" => "controllers/product.controller.php",
-    "/cart" => "controllers/cart.controller.php",
+    "/cart" => "controllers/cart/main.php",
     "/checkout" => "controllers/checkout.controller.php",
     "/user-settings" => "controllers/user.controller.php",
     "/login-form" => "controllers/login.controller.php",
     "/login" => "controllers/login.controller.php",
     "/register-form" => "views/register.view.php",
     "/register" => "controllers/register.controller.php",
+    "/products/show" => "controllers/product/show.php",
+    "/cart/add" => "controllers/cart/add.php"
 ];
 
 if(array_key_exists($uri, $routes)){

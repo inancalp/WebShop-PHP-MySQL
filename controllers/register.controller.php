@@ -2,7 +2,6 @@
 
 include_once "models/user.model.php";
 
-
 if ($_SERVER["REQUEST_METHOD"] == "POST") {
 
     // if register clicked @register.view.php
@@ -25,23 +24,10 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
 }
 
 
-
 function isEmailInUse() {
     //
     return false;
 }
-
-// returns class instances
-// function createUser() {
-//     $email = htmlspecialchars($_POST['email']);
-//     $pwd = htmlspecialchars($_POST['pwd']);
-//     $pwd_hashed = password_hash($pwd, PASSWORD_BCRYPT);
-
-//     include("server/create_user.php");
-//     $user_id = createUserDB($email, $pwd_hashed);
-
-//     return $user_id;
-// }
 
 function navigateToCart() {
     dd($_SESSION);

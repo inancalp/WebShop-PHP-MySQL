@@ -14,7 +14,7 @@
                 <p class="card-text">
                     $<?php echo $product['price'] ?>
                 </p>
-                <a href="<?php echo 'product?product_id='.$product['product_id'] ?>" class="btn btn-primary">Show Product</a>
+                <a href="<?php echo 'products/show?product_id='.$product['product_id'] ?>" class="btn btn-primary">Show Product</a>
             </div>
         </div>
         <?php } ?>

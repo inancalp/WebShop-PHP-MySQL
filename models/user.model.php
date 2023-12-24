@@ -42,7 +42,7 @@ class UserModel {
     private $db;
 
     public function __construct() {
-        $this->db = getConnection();
+        $this->db = ConnectionDB::getConnection();
     }
 
     public function saveUser(User $user) {

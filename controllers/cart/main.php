@@ -1,7 +1,6 @@
 <?php
+include('server/products.php');
 
-
-// needed to be able to fetch "get_product.php"
 if ($_SERVER["REQUEST_METHOD"] == "POST") {
     
     $product_id = isset($_POST['product_id']) ? htmlspecialchars($_POST['product_id']) : '';
@@ -9,67 +8,34 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     $requested_quantity = isset($_POST['requested_quantity']) ? intval(htmlspecialchars($_POST['requested_quantity'])) : null;
     $updated_requested_quantity = isset($_POST['updated_requested_quantity']) ? intval(htmlspecialchars($_POST['updated_requested_quantity'])) : null;
 
-    // getProduct and getCategory included here.
-    include('server/get_product.php');
-    $product = getProduct($product_id);
-    $category = getCategory($product);
-
+    $product = ProductsDB::getProduct($product_id);
+    $category = ProductsDB::getCategory($product);
 
     //ADD PRODUCT
     if(isset($_POST['add_product'])) {
-
-        include("controllers/user.controller.php");
-
-        if(!isUserLoggedIn()){
-            header("Location: login");
-            exit;
-        }
-
-        if(isQuantityAvailable($requested_quantity, $product)){
-
-            if(isProductInCart($product)){
-                updateCart($product, $requested_quantity);
-            }
-            else{
-                addToCart($product, $requested_quantity);
-            }
-
-        }
-        else{
-            // (!) Do something else. return and warn user or something...
-            directToPreviousView();
-        }
+        require_once("controllers/cart/add.php");
+        exit();
     }
-
-
     //REMOVE PRODUCT
     if(isset($_POST['remove_product'])) {
-        $requested_quantity = -$requested_quantity;
-        removeProductFromCart($product_id);
-        dbUpdateAmountLeft($product, $requested_quantity);
+        require_once("controllers/cart/remove.php");
+        exit();
     }
-
-
     //EDIT PRODUCT
     if(isset($_POST['edit_product'])) {
-            
-        $requested_quantity = $updated_requested_quantity - $requested_quantity;
-        
-        if(isQuantityAvailable($requested_quantity, $product)){
-            updateCart($product, $requested_quantity);
-        }
-        else{
-            // (!) add warning for user: "Not enough products in store"
-        }
+        require_once("controllers/cart/edit.php");
+        exit();
     }
 
 
-    include('views/cart.view.php');
-    exit;
+    // change to require_once("controllers/cart/show.php"); later on
+    require_once('views/cart.view.php');
+    exit();
 }
 
+// change to require_once("controllers/cart/show.php"); later on
 include('views/cart.view.php');
-exit;
+exit();
 
 
 function isQuantityIncreased($requested_quantity, $updated_requested_quantity) {
@@ -87,9 +53,7 @@ function dbUpdateAmountLeft($product, $requested_quantity) {
 
     $amount_left = intval($product['amount_left']) - intval($requested_quantity);
     $product_id = $product['product_id'];
-
-    // $amount_left and $product_id used in here:
-    include('server/update_product_amount_left.php');
+    ProductsDB::updateAmountLeft($product_id, $amount_left);
 }
 
 
@@ -150,5 +114,3 @@ function  calculateTotalPrice() {
     $_SESSION['total_price'] = $total_price;
     return $total_price;
 }
-
-?>

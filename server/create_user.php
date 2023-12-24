@@ -1,8 +1,9 @@
 <?php
 
+include_once "server/connection.php";
+
 function createUserDB($email, $pwd_hashed) {
-    include_once "server/connection.php";
-    $connection = getConnection();
+    $connection = ConnectionDB::getConnection();
 
     $stmt = $connection->prepare("INSERT INTO users (email, pwd) VALUES (?, ?)");
     $stmt->bind_param("ss", $email, $pwd_hashed);

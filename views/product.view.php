@@ -1,12 +1,12 @@
 
 <section class="container my-5 pt-5">
-<?php if($product) { ?>
+<?php if($product) { echo getcwd()?>
     <div class="row mt-5">
         <div class="col-lg-5 col-md-6 col-sm-12">
-            <img class="img-fluid w-100 pb-1" src="<?php echo 'assests/imgs/'.$product['product_image'] ?>" alt="<?php echo $product['product_image']; ?>">
+            <img class="img-fluid w-100 pb-1" src="<?php echo '/assests/imgs/'.$product['product_image'] ?>" alt="<?php echo $product['product_image']; ?>">
         </div>
         <div class="col-lg-5 col-md-6 col-sm-12">
-            <form action="cart" method="POST">
+            <form action="/cart" method="POST">
                 <input type="hidden" name="product_id" value="<?php echo $product['product_id'] ?>">
                 <input type="hidden" name="category_id" value="<?php echo $category['category_id'] ?>">
                 
