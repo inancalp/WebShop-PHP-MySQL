@@ -1,22 +1,34 @@
+ 
 
-<section class="container text-center mt-5 py-5">
-    <h3>Products</h3>
+
+<div class="bg-white">
+  <div class="mx-auto max-w-2xl px-4 py-16 sm:px-6 sm:py-24 lg:max-w-7xl lg:px-8">
+    <h2 class="text-2xl font-bold tracking-tight text-gray-900">Products</h2>
     <hr class="mx-auto">
-    <div class="row mx-auto container-fluid">
+    <div class="mt-6 grid grid-cols-1 gap-x-6 gap-y-10 sm:grid-cols-2 lg:grid-cols-4 xl:gap-x-8">
+        
         <?php foreach ($products as $product) { ?>
-        <div class="card m-2" style="width: 18rem;">
-            <img class="" src="assests/imgs/<?php echo $product['product_image'] ?>" alt="">
-            <div class="card-body">
-                <h4 class="card-title">
-                    <?php echo $product['name'] ?>
-                </h4>
-                <h5>Amount left: <?php echo $product['amount_left'] ?></h5>
-                <p class="card-text">
-                    $<?php echo $product['price'] ?>
-                </p>
-                <a href="<?php echo 'products/show?product_id='.$product['product_id'] ?>" class="btn btn-primary">Show Product</a>
+        <!-- product here: -->
+        <div class="group relative">
+            <div class="aspect-h-1 aspect-w-1 w-full overflow-hidden rounded-md bg-gray-200 lg:aspect-none group-hover:opacity-75 lg:h-80">
+            <img class="h-full w-full object-cover object-center lg:h-full lg:w-full" src="assests/imgs/<?php echo $product['product_image'] ?>" alt="<?php echo $product['product_image'] ?>">
+            </div>
+            <div class="mt-4 flex justify-between">
+            <div>
+                <h3 class="text-sm text-gray-700">
+                    <a href="<?php echo 'products/show?product_id='.$product['product_id'] ?>">
+                        <span aria-hidden="true" class="absolute inset-0"></span>
+                        <?php echo $product['name'] ?>
+                    </a>
+                </h3>
+                <p class="mt-1 text-sm text-gray-500">Amount left: <?php echo $product['amount_left'] ?></p>
+            </div>
+            <p class="text-sm font-medium text-gray-900">$<?php echo $product['price'] ?></p>
             </div>
         </div>
+
+      <!-- More products... -->
         <?php } ?>
     </div>
-</section>
+  </div>
+</div>

@@ -1,12 +1,12 @@
 <?php
 
 session_start();
-require("functions.php");
+require_once("functions.php");
 //
-require("partials/header.php");
-require("router.php");
+require_once("partials/header.php");
+require_once("router.php");
 //
-require("partials/footer.php");
+require_once("partials/footer.php");
 
 
 

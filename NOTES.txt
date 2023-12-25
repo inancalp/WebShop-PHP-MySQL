@@ -17,3 +17,10 @@ php -S localhost:8000
 	>> when user want to checkout:
 		>> user needs to either login or register.
 (>>) Apply Models instead of Server Files.
+
+
+
+
+(!) AT DB FIRST QUERY:
+  >> users:
+    >> type >> user_type

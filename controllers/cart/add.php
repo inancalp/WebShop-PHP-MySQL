@@ -3,7 +3,7 @@
 include("controllers/user.controller.php");
 
 if(!isUserLoggedIn()){
-    header("Location: login");
+    header("Location: /login");
     exit();
 }
 

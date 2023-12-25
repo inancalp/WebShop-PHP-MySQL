@@ -1,71 +1,65 @@
-<!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Document</title>
-
-    <!-- BOOTSTRAP -->
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-T3c6CoIi6uLrA9TneNEoa7RxnatzjcDSCmG1MXxSR1GAsXEV/Dwwykc2MPK8M2HN" crossorigin="anonymous">
-    <!-- FONT AWESOME -->
-    <script src="https://kit.fontawesome.com/2a50fbab86.js" crossorigin="anonymous"></script>
-
-
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js" integrity="sha384-C6RzsynM9kWDrMNeT87bh95OGNyZPhcTNXj1NW7RuBCsyN/o0jlpcV8Qyq46cDfL" crossorigin="anonymous"></script>
-    <link rel="stylesheet" href="/assets/css/style.css">
+    <!-- <script src="https://kit.fontawesome.com/2a50fbab86.js" crossorigin="anonymous"></script> -->
+    <script src="https://cdn.tailwindcss.com"></script>
 
     
 </head>
 
-<body>
-    <div class="container">
+<body class="h-full">
+  <div>
+  <nav class="bg-gray-800">
+    <div class="mx-auto max-w-7xl px-2">
+        <div class="flex h-16 items-center justify-between">
+            <div class="flex justify-between w-full items-center">
+                <div class="flex space-x-4">
+                    <div class="flex flex-shrink-0 items-center">
+                        <img class="h-8 w-auto" src="https://tailwindui.com/img/logos/mark.svg?color=indigo&shade=500"
+                            alt="Your Company">
+                    </div>
+                    <a href="/" class="bg-gray-900 text-white rounded-md px-3 py-2 text-sm font-medium" aria-current="page">Home</a>
+                    <a href="/cart" class="text-gray-300 hover:bg-gray-700 hover:text-white rounded-md px-3 py-2 text-sm font-medium">Cart</a>
+                    <a href="/profile" class="text-gray-300 hover:bg-gray-700 hover:text-white rounded-md px-3 py-2 text-sm font-medium">Profile</a>
+                </div>
 
-      <!-- NavBar -->
-      <nav class="navbar navbar-expand-lg bg-body-tertiary mt-2 mb-5">
-          <div class="container-fluid">
-            <a class="navbar-brand" href="/">Navbar</a>
-            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
-              <span class="navbar-toggler-icon"></span>
-            </button>
-            <div class="collapse navbar-collapse" id="navbarSupportedContent">
-              <ul class="navbar-nav me-auto mb-2 mb-lg-0">
-                <li class="nav-item">
-                  <a class="nav-link active" aria-current="page" href="/">Home</a>
-                </li>
-                <li class="nav-item">
-                  <a class="nav-link" href="cart">
-                      <i class="fa-solid fa-cart-arrow-down me-1"></i>
-                      Cart
-                  </a>
-                </li>
-                <li class="nav-item">
-                  <a class="nav-link" href="#">Contact Us</a>
-                </li>
-                <li class="nav-item">
-                  <a class="nav-link" href="/user-settings">User Settings</a>
-                </li>
-                
-              </ul>
-              <ul class="navbar-nav me-auto mb-2 mb-lg-0">
-                  <form class="d-flex" role="search">
-                      <input class="form-control me-2" type="search" placeholder="Search" aria-label="Search">
-                      <button class="btn btn-outline-success" type="submit">Search</button>
-                  </form>
-                
-              </ul>
-              <ul class="navbar-nav me-auto mb-2 mb-lg-0">
-                  <li class="nav-item dropdown">
-                      <a class="nav-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false">
-                      User Log-in/out
-                      </a>
-                      <ul class="dropdown-menu">
-                      <li><a class="dropdown-item" href="#">Action</a></li>
-                      <li><a class="dropdown-item" href="#">Another action</a></li>
-                      <li><hr class="dropdown-divider"></li>
-                      <li><a class="dropdown-item" href="#">Something else here</a></li>
-                      </ul>
-                  </li>
-              </ul>
+                <!-- Search Bar -->
+                <div class="flex space-x-4">
+                  <div class="relative flex items-center">
+                      <input type="text"
+                          class="bg-gray-900 text-white rounded-md px-3 py-1.5 placeholder-gray-400 focus:ring-2 focus:ring-inset focus:ring-white"
+                          placeholder="Search" />
+                      <button
+                          class="absolute inset-y-0 right-0 flex items-center pr-3 focus:outline-none focus:ring-2 focus:ring-inset focus:ring-white">
+                          <svg class="h-5 w-5 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"
+                              xmlns="http://www.w3.org/2000/svg">
+                              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                  d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"></path>
+                          </svg>
+                      </button>
+                  </div>
+                  <?php if (isset($_SESSION['user'])) { ?>
+                  <div class="mt-4">
+                      <form action="/logout" method="POST">
+                          <button name="logout" id="logout"
+                              class="text-gray-300 hover:bg-gray-700 hover:text-white rounded-md px-3 py-2 font-medium">Log
+                              out</button>
+                      </form>
+                  </div>
+                  <?php } else { ?>
+                  <div class="mt-4">
+                  </div>
+                  <div class="flex space-x-4">
+                      <a href="/login" name="login" id="logout"
+                          class="text-gray-300 hover:bg-gray-700 hover:text-white rounded-md px-3 py-2 font-medium">Login</a>
+                      <a href="/register" name="register" id="logout"
+                          class="text-gray-300 hover:bg-gray-700 hover:text-white rounded-md px-3 py-2 font-medium">Register</a>
+                  </div>
+                  <?php } ?>
+                </div>
             </div>
-          </div>
-      </nav>
+        </div>
+    </div>
+</nav>
