@@ -31,12 +31,13 @@ class OrdersDB {
         $connection = ConnectionDB::getConnection();
         
         // dd(['$product' => $product, '$order_id' => $order_id]);
-        $stmt = $connection->prepare("INSERT INTO orders_products (order_id, product_id, product_amount) VALUES (?, ?, ?)");
+        $stmt = $connection->prepare("INSERT INTO orders_products (order_id, product_id, product_amount, subtotal) VALUES (?, ?, ?, ?)");
         $stmt->bind_param(
-            "iii",
+            "iiid",
             $order_id,
             $product['product_id'],
-            $product['quantity']
+            $product['quantity'],
+            $product['subtotal']
         );
         $stmt->execute();
         $order_products_id = $connection->insert_id;
@@ -77,6 +78,27 @@ class OrdersDB {
         $connection->close();
 
         return $payment;
+    }
+
+
+
+    static function getOrdersProducts($order_id) {
+        $connection = ConnectionDB::getConnection();
+        $stmt = $connection->prepare("SELECT * FROM orders_products WHERE order_id = ?");
+        $stmt->bind_param("i", $order_id);
+        $stmt->execute();
+        
+        $result = $stmt->get_result();
+        $order_products = [];
+    
+        while ($row = $result->fetch_assoc()) {
+            $order_products[] = $row;
+        }
+    
+        $stmt->close();
+        $connection->close();
+    
+        return $order_products;
     }
     
 }

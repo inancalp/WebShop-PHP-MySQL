@@ -2,7 +2,12 @@
 include('server/products.php');
 
 // (.) seperates query from path, then grabs query.
+if(!isset(parse_url($_SERVER['REQUEST_URI'])['query'])){
+    abort(404);
+}
 $query = parse_url($_SERVER['REQUEST_URI'])['query'];
+
+
 
 // (.) seperates query to "key => value".
 parse_str($query, $query_parameters);
@@ -22,7 +27,7 @@ else {
     $product = ProductsDB::getProduct($product_id);
 
     
-    if(!$product) {
+    if(!$product || $product['is_active'] == 0) {
         abort(404);
     }
 

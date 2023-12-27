@@ -3,6 +3,24 @@
 include_once "server/connection.php";
 
 class UsersDB {
+
+    static function getUsers($user_id) {
+        $connection = ConnectionDB::getConnection();
+    
+        $stmt = $connection->prepare("SELECT * FROM users WHERE user_id != ?");
+        $stmt->bind_param("i", $user_id);
+        $stmt->execute();
+        
+        $result = $stmt->get_result();
+        $users = $result->fetch_all(MYSQLI_ASSOC);
+    
+        $stmt->close();
+        $connection->close();
+    
+        return $users;
+    }
+    
+
     static function getUser($email) {
         $connection = ConnectionDB::getConnection();
         
@@ -48,6 +66,37 @@ class UsersDB {
     
         $stmt = $connection->prepare("UPDATE users SET address_id=? WHERE user_id=?");
         $stmt->bind_param("ii", $address_id, $user_id);
+        
+        $stmt->execute();
+        $rowsAffected = $stmt->affected_rows;
+    
+        $stmt->close();
+        $connection->close();
+    
+        return $rowsAffected ? true : false;
+    }
+
+
+    static function updateUserAccountStatus($user_id, $status) {
+        $connection = ConnectionDB::getConnection();
+    
+        $stmt = $connection->prepare("UPDATE users SET account_status=? WHERE user_id=?");
+        $stmt->bind_param("si", $status, $user_id);
+        
+        $stmt->execute();
+        $rowsAffected = $stmt->affected_rows;
+    
+        $stmt->close();
+        $connection->close();
+    
+        return $rowsAffected ? true : false;
+    }
+
+    static function updateUserType($user_id, $type) {
+        $connection = ConnectionDB::getConnection();
+    
+        $stmt = $connection->prepare("UPDATE users SET user_type=? WHERE user_id=?");
+        $stmt->bind_param("si", $type, $user_id);
         
         $stmt->execute();
         $rowsAffected = $stmt->affected_rows;

@@ -1,3 +1,4 @@
+-- 1)
 
 CREATE TABLE IF NOT EXISTS `addresses` (
     `address_id` INT NOT NULL AUTO_INCREMENT,
@@ -26,8 +27,6 @@ CREATE TABLE IF NOT EXISTS `users` (
     PRIMARY KEY (`user_id`),
     FOREIGN KEY (`address_id`) REFERENCES `addresses`(`address_id`) ON DELETE CASCADE
 ) ENGINE=INNODB DEFAULT CHARSET=latin1;
-
-
 
 CREATE TABLE IF NOT EXISTS `payments` (
     `payment_id` INT NOT NULL AUTO_INCREMENT,
@@ -80,20 +79,18 @@ CREATE TABLE IF NOT EXISTS `orders_products` (
     `order_id` INT NOT NULL,
     `product_id` INT NOT NULL,
     `product_amount` INT NOT NULL,
+    `subtotal` DECIMAL(10, 2) NOT NULL,
     PRIMARY KEY (`orders_products_id`),
     FOREIGN KEY (`order_id`) REFERENCES `orders`(`order_id`) ON DELETE CASCADE,
     FOREIGN KEY (`product_id`) REFERENCES `products`(`product_id`) ON DELETE CASCADE
 ) ENGINE=INNODB DEFAULT CHARSET=latin1;
 
 
-ALTER TABLE `orders`
-ADD COLUMN `payment_id` INT AFTER `order_id`,
-ADD CONSTRAINT `fk_orders_payments`
-FOREIGN KEY (`payment_id`) REFERENCES `payments`(`payment_id`) ON DELETE SET NULL;
 
 ----------------------------------------------------
 
 
+-- 2)
 
 INSERT INTO `categories` (`name`) VALUES ('Camp Chair');
 INSERT INTO `categories` (`name`) VALUES ('Coffee Mug');
@@ -102,12 +99,14 @@ INSERT INTO `categories` (`name`) VALUES ('Pocket Knife');
 INSERT INTO `categories` (`name`) VALUES ('Lantern');
 INSERT INTO `categories` (`name`) VALUES ('Rooftop Tent');
 INSERT INTO `categories` (`name`) VALUES ('Tent');
+INSERT INTO `categories` (`name`) VALUES ('Moka Pot');
+
 
 
 -----------------------------------------------------
 
 
-
+-- 3)
 
 INSERT INTO `products` (`category_id`, `name`, `price`, `amount_left`, `is_active`, `product_image`)
 SELECT `category_id`, 'Green Chair', 29.99, 29, true, 'chair-green.jpg'
@@ -116,6 +115,11 @@ WHERE `name` = 'Camp Chair';
 
 INSERT INTO `products` (`category_id`, `name`, `price`, `amount_left`, `is_active`, `product_image`)
 SELECT `category_id`, 'Green Red', 29.99, 29, true, 'chair-red.jpg'
+FROM `categories`
+WHERE `name` = 'Camp Chair';
+
+INSERT INTO `products` (`category_id`, `name`, `price`, `amount_left`, `is_active`, `product_image`)
+SELECT `category_id`, 'Green Red', 29.99, 29, true, 'chairs.jpg'
 FROM `categories`
 WHERE `name` = 'Camp Chair';
 
@@ -135,24 +139,83 @@ FROM `categories`
 WHERE `name` = 'Coffee Mug';
 
 INSERT INTO `products` (`category_id`, `name`, `price`, `amount_left`, `is_active`, `product_image`)
+SELECT `category_id`, 'Double Stove 1', 42.99, 29, true, 'double-stove1.jpg'
+FROM `categories`
+WHERE `name` = 'Camp Stove';
+
+INSERT INTO `products` (`category_id`, `name`, `price`, `amount_left`, `is_active`, `product_image`)
+SELECT `category_id`, 'Double Stove 2', 42.99, 29, true, 'double-stove2.jpg'
+FROM `categories`
+WHERE `name` = 'Camp Stove';
+
+INSERT INTO `products` (`category_id`, `name`, `price`, `amount_left`, `is_active`, `product_image`)
+SELECT `category_id`, 'Stove Large', 39.99, 29, true, 'stove-large.jpg'
+FROM `categories`
+WHERE `name` = 'Camp Stove';
+
+INSERT INTO `products` (`category_id`, `name`, `price`, `amount_left`, `is_active`, `product_image`)
+SELECT `category_id`, 'Stove Small', 33.99, 29, true, 'stove-small.jpg'
+FROM `categories`
+WHERE `name` = 'Camp Stove';
+
+INSERT INTO `products` (`category_id`, `name`, `price`, `amount_left`, `is_active`, `product_image`)
 SELECT `category_id`, 'Green Tent', 44.99, 29, true, 'tent-green.jpg'
 FROM `categories`
 WHERE `name` = 'Tent';
-
-
 
 INSERT INTO `products` (`category_id`, `name`, `price`, `amount_left`, `is_active`, `product_image`)
 SELECT `category_id`, 'Orange Tent', 44.99, 29, true, 'tent-orange.jpg'
 FROM `categories`
 WHERE `name` = 'Tent';
 
-
 INSERT INTO `products` (`category_id`, `name`, `price`, `amount_left`, `is_active`, `product_image`)
 SELECT `category_id`, 'Yellow Tent', 44.99, 29, true, 'tent-yellow.jpg'
 FROM `categories`
 WHERE `name` = 'Tent';
 
+INSERT INTO `products` (`category_id`, `name`, `price`, `amount_left`, `is_active`, `product_image`)
+SELECT `category_id`, 'Knife Black', 25.99, 29, true, 'knife1.jpg'
+FROM `categories`
+WHERE `name` = 'Pocket Knife';
 
+INSERT INTO `products` (`category_id`, `name`, `price`, `amount_left`, `is_active`, `product_image`)
+SELECT `category_id`, 'Knife Brown', 25.99, 29, true, 'knife2.jpg'
+FROM `categories`
+WHERE `name` = 'Pocket Knife';
 
+INSERT INTO `products` (`category_id`, `name`, `price`, `amount_left`, `is_active`, `product_image`)
+SELECT `category_id`, 'Lantern Silver', 25.99, 29, true, 'lantern1.jpg'
+FROM `categories`
+WHERE `name` = 'Lantern';
 
+INSERT INTO `products` (`category_id`, `name`, `price`, `amount_left`, `is_active`, `product_image`)
+SELECT `category_id`, 'Lantern Black', 25.99, 29, true, 'lantern2.jpg'
+FROM `categories`
+WHERE `name` = 'Lantern';
 
+INSERT INTO `products` (`category_id`, `name`, `price`, `amount_left`, `is_active`, `product_image`)
+SELECT `category_id`, 'Moka Pot', 25.99, 29, true, 'moka.jpg'
+FROM `categories`
+WHERE `name` = 'Moka Pot';
+
+INSERT INTO `products` (`category_id`, `name`, `price`, `amount_left`, `is_active`, `product_image`)
+SELECT `category_id`, 'Moka Pot Small', 21.99, 29, true, 'moka-small.jpg'
+FROM `categories`
+WHERE `name` = 'Moka Pot';
+
+INSERT INTO `products` (`category_id`, `name`, `price`, `amount_left`, `is_active`, `product_image`)
+SELECT `category_id`, 'Moka Pot Large', 29.99, 29, true, 'moka-large.jpg'
+FROM `categories`
+WHERE `name` = 'Moka Pot';
+
+INSERT INTO `products` (`category_id`, `name`, `price`, `amount_left`, `is_active`, `product_image`)
+SELECT `category_id`, 'Rooftop Tent Orange', 109.99, 29, true, 'rooftop-tent1.jpg'
+FROM `categories`
+WHERE `name` = 'Rooftop Tent';
+
+INSERT INTO `products` (`category_id`, `name`, `price`, `amount_left`, `is_active`, `product_image`)
+SELECT `category_id`, 'Rooftop Tent White', 109.99, 29, true, 'rooftop-tent2.jpg'
+FROM `categories`
+WHERE `name` = 'Rooftop Tent';
+
+INSERT INTO `users` (`user_type`, `account_status`, `first_name`, `last_name`, `birth_date`, `email`, `pwd`) VALUES ('admin', 'active', 'admin', 'admin', '12-12-1912', 'admin@local.test', '$2y$10$q8CR6/2sbd5lPBawbV2rn.Gk8vl5t8zv0KV3tAu3N/JLsB6gd8Jvu');

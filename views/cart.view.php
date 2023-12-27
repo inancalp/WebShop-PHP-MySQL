@@ -1,4 +1,4 @@
-<div class="flex flex-col bg-white m-12">
+<div class="flex flex-col bg-white m-12 mx-auto w-4/6">
     <div class="flex-1 overflow-y-auto px-4 py-6 sm:px-6">
         <div class="flex items-start justify-between">
             <h2 class="text-lg font-medium text-gray-900" id="slide-over-title">Shopping cart</h2>
@@ -27,13 +27,13 @@
                             <h3>
                                 <a href="<?php echo 'product?product_id='.$product['product_id']; ?>"><?php echo $product['name'] ?></a>
                             </h3>
-                            <p class="ml-4">$<?php echo calculateSubtotal($product) ?></p>
+                            <p class="ml-4"><span class="text-xs text-gray-500 mx-2">Subtotal:</span>$<?php echo calculateSubtotal($product) ?></p>
                             </div>
                             <p class="mt-1 text-sm text-gray-500"><?php echo $product['category']?></p>
+                            
+                            <p class="text-gray-500"><span class="mt-1 text-sm text-gray-500">Quantity: </span> <?php echo $product['quantity']?></p>
                         </div>
                         <div class="flex flex-1 items-end justify-between text-sm">
-                            <p class="text-gray-500">Qty <?php echo $product['quantity']?></p>
-
                             <div class="flex space-x-4">
                                 <div class="flex justify-center items-center">
                                     <form action="cart" method="POST">
@@ -58,25 +58,30 @@
                     unset($_SESSION['cart'][$product['product_id']]);
                 }}} else { ?>
                 </ul>
-                <a href="/" class="text-lg underline hover:text-blue-500"> There are no items in the cart.</a href="">
+                <a href="/" class="text-blue-600 text-lg underline hover:text-blue-500"> There are no items in the cart.</a href="">
                 <?php } ?>
             </div>
         </div>
     </div>
     <hr class="border-top border-indigo-300 mx-12">
     <div class="border-t border-gray-200 px-4 py-6 sm:px-6">
-        <div class="flex justify-between text-base font-medium text-gray-900">
-            <p>Subtotal</p>
+        <div class="my-2">
+            <?php if(isset($_SESSION['errors']['amount_left'])) { 
+                    foreach($_SESSION['errors']['amount_left'] as $error){ ?>
+                    <p class="text-xs text-red-500 underline"><?php echo $error ?></p>
+            <?php }} ?>
+        </div>
+        <div class="flex text-base font-medium text-gray-900">
+            <p><span class="text-gray-500 mr-2">Total:</span> </p>
             <p>$<?php echo calculateTotalPrice(); ?></p>
             </div>
-            <p class="mt-0.5 text-sm text-gray-500">Shipping and taxes calculated at checkout.</p>
         <div class="mt-6">
             <form action="/checkout" method="POST">  
                 <button name="checkout" class="rounded-md border border-transparent bg-indigo-600 px-6 py-3 text-base font-medium text-white shadow-sm hover:bg-indigo-700">Checkout</button>
             </form>
             <?php if(isset($_SESSION['errors']['address'])) { ?>
                   <a href="/profile?user_id=<?php echo $_SESSION['user']['user_id'] ?>" class="text-sm text-red-500 mt-2 underline hover:text-blue-300"> <?php echo $_SESSION['errors']['address'] ?></a>
-      <?php } ?>
+            <?php } ?>
         </div>
     </div>
 </div>

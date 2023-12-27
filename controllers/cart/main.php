@@ -1,6 +1,11 @@
 <?php
 include('server/products.php');
 // dd($_SESSION);
+
+// if(isset($_SESSION['user']) && $_SESSION['user']['user_type'] == "admin"){
+//     abort(404);
+// }
+
 if ($_SERVER["REQUEST_METHOD"] == "POST") {
     
     $product_id = isset($_POST['product_id']) ? htmlspecialchars($_POST['product_id']) : '';
@@ -11,17 +16,6 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     $product = ProductsDB::getProduct($product_id);
     $category = ProductsDB::getCategory($product);
 
-    // $arr = [
-    //     'product_id' => $product_id,
-    //     'category_id' => $category_id,
-    //     'requested_quantity' => $requested_quantity,
-    //     'updated_requested_quantity' => $updated_requested_quantity,
-    //     'product' => $product,
-    //     'category' => $category,
-    // ];
-    
-
-    // dd($arr);
     //ADD PRODUCT
     if(isset($_POST['add_product'])) {
         require_once("controllers/cart/add.php");
@@ -61,14 +55,6 @@ function isQuantityAvailable($requested_quantity, $product) {
     return false;
 }
 
-// function dbUpdateAmountLeft($product, $requested_quantity) {
-
-//     $amount_left = intval($product['amount_left']) - intval($requested_quantity);
-//     $product_id = $product['product_id'];
-//     ProductsDB::updateAmountLeft($product_id, $amount_left);
-// }
-
-
 function addToCart($product, $category, $requested_quantity) {
     $_SESSION['cart'][$product['product_id']] = array(
         'product_id' => $product['product_id'],
@@ -78,13 +64,11 @@ function addToCart($product, $category, $requested_quantity) {
         'price' => $product['price'],
         'category' => $category['name'],
     );
-    // dbUpdateAmountLeft($product, $requested_quantity);
 }
 
 
 function updateCart($product, $requested_quantity) {
     $_SESSION['cart'][$product['product_id']]['quantity'] = $requested_quantity;
-    // dbUpdateAmountLeft($product, $requested_quantity);
 }
 
 function isProductInCart($product) {

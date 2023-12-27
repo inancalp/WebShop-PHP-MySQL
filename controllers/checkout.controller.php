@@ -1,14 +1,19 @@
 <?php
 
-include('server/payments.php');
-include('server/orders.php');
+include_once('server/payments.php');
+include_once('server/orders.php');
+include_once('server/products.php');
+
+
+if(isset($_SESSION['user']) && $_SESSION['user']['user_type'] == "admin"){
+    abort(404);
+}
 
 if ($_SERVER["REQUEST_METHOD"] == "POST") {
 
-    // CHECKOUT BUTTON CLICKED:
+    // dd($_SESSION);
     if(isset($_POST['checkout'])){
 
-        //user's information and addresses etc.
         if(isCartEmpty()){
             header("Location: /");
             exit();
@@ -16,12 +21,30 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
 
         if(empty($_SESSION['user']['address'])){
             $_SESSION['errors']['address'] = "Please enter an address before the Check-Out.";
+        }
+
+        foreach($_SESSION['cart'] as $product){
+            $productDB = ProductsDB::getProduct($product['product_id']);
+            if($productDB['amount_left'] < $product['quantity']){
+                $_SESSION['errors']['amount_left'][$product['product_id']] = "Requested amount for the product: ". $product['name'] . " is not available. Try amount: " . $productDB['amount_left'] . " or below.";
+            }
+        }
+
+        if(isset($_SESSION['errors']) && !empty($_SESSION['errors'])) {
             header("Location: /cart");
             exit();
         }
 
-        // dd($_SESSION);
-        // PAYMENT
+        foreach($_SESSION['cart'] as $product){
+            $productDB = ProductsDB::getProduct($product['product_id']);
+            $amount_left = $productDB['amount_left'] - $product['quantity'];
+            $result = ProductsDB::updateAmountLeft($product['product_id'], $amount_left);
+            if(!$result) {
+                dd("SOMETHING WENT WRONG WHILE >> ProductsDB::updateAmountLeft");
+            }
+        }
+
+
         $payment['total_price'] = number_format(calculateTotalPrice(), 2);
         $payment['status'] = "paid";
         $payment['date'] = date_create()->format("Y-m-d H:i:s");
@@ -30,7 +53,6 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
             dd("Something went wrong with Payment");
         }
 
-        // ORDER
         $order['payment_id'] = $payment_id;
         $order['user_id'] = $_SESSION['user']['user_id'];
         $order['order_date'] = date_create()->format("Y-m-d H:i:s");
@@ -41,15 +63,12 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
         }
 
         foreach($_SESSION['cart'] as $product) {
+            $product['subtotal'] = calculateSubtotal($product);
             $order_products_id = OrdersDB::createOrderProducts($order_id, $product);
-            // dd($order_products_id);
             if(!$order_products_id){
                 dd("Something went wrong with Fetching products into an order.");
             }
         }
-
-        // dd($debug);
-
 
         unset($_SESSION['cart']);
         $payment = [];
@@ -82,4 +101,12 @@ function  calculateTotalPrice() {
 
     $_SESSION['total_price'] = $total_price;
     return $total_price;
+}
+
+
+function dbUpdateAmountLeft($product, $requested_quantity) {
+
+    $amount_left = intval($product['amount_left']) - intval($requested_quantity);
+    $product_id = $product['product_id'];
+    ProductsDB::updateAmountLeft($product_id, $amount_left);
 }

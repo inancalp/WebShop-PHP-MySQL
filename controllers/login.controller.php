@@ -9,10 +9,16 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
         $pwd = htmlspecialchars($_POST['pwd']);
         $email = htmlspecialchars($_POST['email']);
         $user = UsersDB::getUser($email);
-        // dd($user);
-        // dd($user);
+        
+
+
+
         if(!$user || !password_verify($pwd, $user['pwd'])){
             $_SESSION['errors']['login'] = "User could not be validated.";
+        }
+
+        if($user['account_status'] == "inactive"){
+            $_SESSION['errors']['login'] = "User account status: Inactive.";
         }
 
         if(isset($_SESSION['errors'])) {
@@ -27,6 +33,8 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
         
         $address = AddressesDB::getAddress($user['address_id']);
 
+    
+        
         $_SESSION['user'] = $user ? $user : "";
         $_SESSION['user']['address'] = $address;
 

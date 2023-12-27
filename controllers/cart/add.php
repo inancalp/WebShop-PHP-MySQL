@@ -6,6 +6,10 @@ if(!isset($_SESSION['user'])){
     exit();
 }
 
+if(isset($_SESSION['user']) && $_SESSION['user']['user_type'] == "admin"){
+    abort(404);
+}
+
 if(isQuantityAvailable($requested_quantity, $product)){
 
     if(isProductInCart($product)){
@@ -20,6 +24,5 @@ else{
     directToPreviousView();
 }
 
-header("Location: /");
-exit();
+// abort(404);
 

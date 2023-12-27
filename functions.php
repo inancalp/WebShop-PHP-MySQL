@@ -11,7 +11,7 @@ function dd($value) {
 function view($path, $attributes = [])
 {
 	extract($attributes);
-	require $path;
+	require_once $path;
 }
 
 
