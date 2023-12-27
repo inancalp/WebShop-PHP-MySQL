@@ -1,10 +1,5 @@
 <?php
 include('server/products.php');
-// dd($_SESSION);
-
-// if(isset($_SESSION['user']) && $_SESSION['user']['user_type'] == "admin"){
-//     abort(404);
-// }
 
 if ($_SERVER["REQUEST_METHOD"] == "POST") {
     
@@ -39,8 +34,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
 
 
 if ($_SERVER["REQUEST_METHOD"] == "GET") {
-// change to require_once("controllers/cart/show.php"); later on
-    include('views/cart.view.php');
+    include_once('views/cart.view.php');
     exit();
 }
 

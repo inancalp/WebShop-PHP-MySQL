@@ -1,6 +1,5 @@
 <?php
 
-
 if(isset($_SESSION['user']) && $_SESSION['user']['user_type'] == "admin"){
     abort(404);
 }

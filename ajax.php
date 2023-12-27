@@ -3,7 +3,6 @@ include_once('server/products.php');
 include_once('functions.php');
 
 if(isset($_POST['input'])){
-    // dd($_POST);
     $input = htmlspecialchars($_POST['input']);
 
     if($input == ""){

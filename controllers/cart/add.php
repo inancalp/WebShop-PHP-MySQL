@@ -20,9 +20,7 @@ if(isQuantityAvailable($requested_quantity, $product)){
     }
 }
 else{
-    // (!) Do something else. return and warn user or something...
     directToPreviousView();
 }
 
-// abort(404);
 

@@ -4,8 +4,8 @@ include_once('server/users.php');
 include_once('validator.php');
 
 if(isset($_SESSION['user']) && $_SESSION['user']['user_type'] == "admin"){
-    // abort(404);
-    dd("Here?");
+    abort(404);
+    // dd("Here?");
 }
 
 if ($_SERVER["REQUEST_METHOD"] == "POST") {
