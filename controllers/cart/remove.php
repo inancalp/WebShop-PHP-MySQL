@@ -1,7 +1,12 @@
 <?php
 
+if(!isset($_SESSION['user'])){
+    header("Location: /login");
+    exit();
+}
+
 $requested_quantity = -$requested_quantity;
 removeProductFromCart($product_id);
-dbUpdateAmountLeft($product, $requested_quantity);
+// dbUpdateAmountLeft($product, $requested_quantity);
 
 

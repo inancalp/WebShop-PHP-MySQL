@@ -21,8 +21,20 @@
                             alt="Your Company">
                     </div>
                     <a href="/" class="bg-gray-900 text-white rounded-md px-3 py-2 text-sm font-medium" aria-current="page">Home</a>
-                    <a href="/cart" class="text-gray-300 hover:bg-gray-700 hover:text-white rounded-md px-3 py-2 text-sm font-medium">Cart</a>
-                    <a href="/profile" class="text-gray-300 hover:bg-gray-700 hover:text-white rounded-md px-3 py-2 text-sm font-medium">Profile</a>
+                    
+                    <?php if(isset($_SESSION['user'])){ ?>
+                        <?php if(isset($_SESSION['cart']) && !empty($_SESSION['cart'])){ ?>
+                        <a href="/cart" class="text-gray-300 hover:bg-gray-700 hover:text-white rounded-md px-3 py-2 text-sm font-medium bold italic">
+                            Cart (<?php echo count($_SESSION['cart']) ?>)
+                        </a>
+                        <?php } else {?>
+                        <a href="/cart" class="text-gray-300 hover:bg-gray-700 hover:text-white rounded-md px-3 py-2 text-sm font-medium">
+                        Cart
+                        </a>
+                        <?php } ?>
+                    <a href="/profile?user_id=<?php echo $_SESSION['user']['user_id']?>" class="text-gray-300 hover:bg-gray-700 hover:text-white rounded-md px-3 py-2 text-sm font-medium">Profile</a>
+                    <a href="/orders" class="text-gray-300 hover:bg-gray-700 hover:text-white rounded-md px-3 py-2 text-sm font-medium">Orders</a>
+                    <?php } ?>
                 </div>
 
                 <!-- Search Bar -->

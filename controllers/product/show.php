@@ -20,7 +20,14 @@ if(!isset($product_id)) {
 } 
 else {
     $product = ProductsDB::getProduct($product_id);
+
+    
+    if(!$product) {
+        abort(404);
+    }
+
     $category = ProductsDB::getCategory($product);
+
 
     // include('views/product.view.php');
     view("views/product.view.php", [

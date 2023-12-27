@@ -1,6 +1,8 @@
 <?php
-
-$requested_quantity = $updated_requested_quantity - $requested_quantity;
+if(!isset($_SESSION['user'])){
+    header("Location: /login");
+    exit();
+}
         
 if(isQuantityAvailable($requested_quantity, $product)){
     updateCart($product, $requested_quantity);

@@ -1,5 +1,6 @@
 <?php
 include_once('server/users.php');
+include_once('server/addresses.php');
 
 
 if ($_SERVER["REQUEST_METHOD"] == "POST") {
@@ -8,7 +9,8 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
         $pwd = htmlspecialchars($_POST['pwd']);
         $email = htmlspecialchars($_POST['email']);
         $user = UsersDB::getUser($email);
-
+        // dd($user);
+        // dd($user);
         if(!$user || !password_verify($pwd, $user['pwd'])){
             $_SESSION['errors']['login'] = "User could not be validated.";
         }
@@ -18,12 +20,30 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
                 'email' => $user['email']
             ];
 
-            header("Location: /register");
+            header("Location: /login");
             exit();
         } 
 
-        $_SESSION['user'] = $user;
+        
+        $address = AddressesDB::getAddress($user['address_id']);
+
+        $_SESSION['user'] = $user ? $user : "";
+        $_SESSION['user']['address'] = $address;
+
+        // dd($_SESSION);
         header("Location: /");
         exit();
     }
+}
+
+
+if($_SERVER["REQUEST_METHOD"] == "GET"){
+
+    if(isset($_SESSION['user'])){
+        header("Location: /");
+        exit();
+    }
+
+    require_once("views/login.view.php");
+    exit();
 }

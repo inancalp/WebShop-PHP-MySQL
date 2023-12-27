@@ -24,3 +24,21 @@ php -S localhost:8000
 (!) AT DB FIRST QUERY:
   >> users:
     >> type >> user_type
+
+
+
+
+--------------------------
+
+(!)
+
+ALTER TABLE users
+ADD COLUMN address_id INT AFTER user_id,
+ADD FOREIGN KEY (address_id) REFERENCES addresses(id);
+
+ALTER TABLE payments
+ADD COLUMN total_price DECIMAL(10, 2) NOT NULL;
+
+ALTER TABLE payments
+CHANGE COLUMN status payment_status VARCHAR(255), -- Adjust the data type as needed
+CHANGE COLUMN date payment_date DATETIME; 

@@ -1,6 +1,6 @@
 <?php
 include('server/products.php');
-
+// dd($_SESSION);
 if ($_SERVER["REQUEST_METHOD"] == "POST") {
     
     $product_id = isset($_POST['product_id']) ? htmlspecialchars($_POST['product_id']) : '';
@@ -11,20 +11,29 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     $product = ProductsDB::getProduct($product_id);
     $category = ProductsDB::getCategory($product);
 
+    // $arr = [
+    //     'product_id' => $product_id,
+    //     'category_id' => $category_id,
+    //     'requested_quantity' => $requested_quantity,
+    //     'updated_requested_quantity' => $updated_requested_quantity,
+    //     'product' => $product,
+    //     'category' => $category,
+    // ];
+    
+
+    // dd($arr);
     //ADD PRODUCT
     if(isset($_POST['add_product'])) {
         require_once("controllers/cart/add.php");
-        exit();
     }
     //REMOVE PRODUCT
     if(isset($_POST['remove_product'])) {
         require_once("controllers/cart/remove.php");
-        exit();
     }
     //EDIT PRODUCT
     if(isset($_POST['edit_product'])) {
+        // dd("REACH");
         require_once("controllers/cart/edit.php");
-        exit();
     }
 
 
@@ -33,10 +42,13 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     exit();
 }
 
-// change to require_once("controllers/cart/show.php"); later on
-include('views/cart.view.php');
-exit();
 
+
+if ($_SERVER["REQUEST_METHOD"] == "GET") {
+// change to require_once("controllers/cart/show.php"); later on
+    include('views/cart.view.php');
+    exit();
+}
 
 function isQuantityIncreased($requested_quantity, $updated_requested_quantity) {
     return $updated_requested_quantity > $requested_quantity;
@@ -49,29 +61,30 @@ function isQuantityAvailable($requested_quantity, $product) {
     return false;
 }
 
-function dbUpdateAmountLeft($product, $requested_quantity) {
+// function dbUpdateAmountLeft($product, $requested_quantity) {
 
-    $amount_left = intval($product['amount_left']) - intval($requested_quantity);
-    $product_id = $product['product_id'];
-    ProductsDB::updateAmountLeft($product_id, $amount_left);
-}
+//     $amount_left = intval($product['amount_left']) - intval($requested_quantity);
+//     $product_id = $product['product_id'];
+//     ProductsDB::updateAmountLeft($product_id, $amount_left);
+// }
 
 
-function addToCart($product, $requested_quantity) {
+function addToCart($product, $category, $requested_quantity) {
     $_SESSION['cart'][$product['product_id']] = array(
         'product_id' => $product['product_id'],
         'product_image' => $product['product_image'],
         'name' => $product['name'],
         'quantity' => $requested_quantity,
         'price' => $product['price'],
+        'category' => $category['name'],
     );
-    dbUpdateAmountLeft($product, $requested_quantity);
+    // dbUpdateAmountLeft($product, $requested_quantity);
 }
 
 
 function updateCart($product, $requested_quantity) {
-    $_SESSION['cart'][$product['product_id']]['quantity'] += $requested_quantity;
-    dbUpdateAmountLeft($product, $requested_quantity);
+    $_SESSION['cart'][$product['product_id']]['quantity'] = $requested_quantity;
+    // dbUpdateAmountLeft($product, $requested_quantity);
 }
 
 function isProductInCart($product) {

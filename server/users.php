@@ -42,5 +42,21 @@ class UsersDB {
     
         return $user_id ? $user_id : false;
     }
+
+    static function updateUserAddressId($user_id, $address_id) {
+        $connection = ConnectionDB::getConnection();
+    
+        $stmt = $connection->prepare("UPDATE users SET address_id=? WHERE user_id=?");
+        $stmt->bind_param("ii", $address_id, $user_id);
+        
+        $stmt->execute();
+        $rowsAffected = $stmt->affected_rows;
+    
+        $stmt->close();
+        $connection->close();
+    
+        return $rowsAffected ? true : false;
+    }
+
 }
 

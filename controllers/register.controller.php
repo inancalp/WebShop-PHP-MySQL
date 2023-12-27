@@ -1,5 +1,6 @@
 <?php
 include_once('server/users.php');
+include_once('server/addresses.php');
 include_once('validator.php');
 
 
@@ -58,11 +59,24 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
             dd("USER COULDN'T CREATED.");
         }
 
-        $_SESSION['user'] = $user;
+        $user = UsersDB::getUser($user['email']);
+        $address = AddressesDB::getAddress($user['address_id']);
+        
+        $_SESSION['user'] = $user ? $user : "";
+        $_SESSION['user']['address'] = $address ? $address : "";
         header("Location: /");
         exit();
     }
 }
 
 
+if($_SERVER["REQUEST_METHOD"] == "GET"){
 
+    if(isset($_SESSION['user'])){
+        header("Location: /");
+        exit();
+    }
+
+    require_once("views/register.view.php");
+    exit();
+}
